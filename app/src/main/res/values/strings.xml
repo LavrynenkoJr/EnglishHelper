@@ -41,5 +41,7 @@
     <string name="loading_login">Logging in…</string>
     <string name="loading_words">Loading words …</string>
 
+    <string name="action_logout">Logout</string>
+
 
 </resources>
