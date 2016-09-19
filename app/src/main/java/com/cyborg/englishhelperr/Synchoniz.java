@@ -31,7 +31,6 @@ public class Synchoniz {
     private boolean firstResponse = true;
 
 
-
     public void downloadWordsServer(Context context) {
 
         mSettings = context.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
@@ -40,11 +39,6 @@ public class Synchoniz {
 
         if (updateTime == 0) {
             System.out.println("Происходит загрузка всех слов с сервера!!!!!!!!!!");
-
-            //QueryOptions queryOptions = new QueryOptions();
-            //queryOptions.setRelated(Arrays.asList("Word"));
-            //queryOptions.setPageSize(5);
-            //queryOptions.setOffset(0);
 
             String owner = "'" + LoginActivity.objectId + "'";
             String whereClause = "ownerId = " + owner;
@@ -143,25 +137,22 @@ public class Synchoniz {
 
                 int size = wordsBackendlessCollection.getCurrentPage().size();
 
-                //listWords.addAll(wordsBackendlessCollection.getCurrentPage());
-                //System.out.println(listWords.size());
+                /* При возврате с сервера коллекции размером больше 0 )
+                    Создается лист в который записываються данные с полученной коллекции (данные приходят страницами по 10 записей)
+                    после чего лист передается в метод saveToDb который сохраняет данные в базу данных
+                    при наличии на слеедующей странице записей действия повторяются
+                 */
 
                 if (size > 0){
+                    List<Words> list = new ArrayList<>();
                     wordsBackendlessCollection.nextPage(this);
-                    System.out.println("NEXT PAGE!!!!!!! " + wordsBackendlessCollection.getCurrentPage().size());
                     listWords.addAll( wordsBackendlessCollection.getCurrentPage() );
+                    list.addAll(wordsBackendlessCollection.getCurrentPage());
+                    saveToDb(list, context);
                 }
-
-                System.out.println("Размер листа полученого с сервера = " + listWords.size());
-
-                //saveToDb(listWords, context);
-
                 //super.handleResponse( wordsBackendlessCollection );
             }
         } );
-        //System.out.println("Сохраняет в бд дист размером = " + listWords.size());
-        // saveToDb(listWords, context);
-
     }
 
     public void setUpdateTime(){
