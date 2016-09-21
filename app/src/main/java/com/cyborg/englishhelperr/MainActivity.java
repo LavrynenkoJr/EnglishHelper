@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
@@ -108,6 +109,10 @@ public class MainActivity extends AppCompatActivity
 
                 public void handleFault( BackendlessFault fault )
                 {
+                    System.out.println("FAULT LOGOUT!");
+                    Toast toast = Toast.makeText(MainActivity.this,
+                            "Для смены пользователя необходимо подключение к интеренету ", Toast.LENGTH_SHORT);
+                    toast.show();
                     // something went wrong and logout failed, to get the error code call fault.getCode()
                 }
             });

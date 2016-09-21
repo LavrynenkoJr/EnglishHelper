@@ -84,8 +84,6 @@ public class Synchoniz {
 
     public void synchronizFromServ(final Context context){
 
-        System.out.println("Происходит синхронизация !!!!!!!!!!");
-
         mSettings = context.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         Backendless.Persistence.of( "WORDS" ).findLast(new AsyncCallback<Map>(){
             @Override
@@ -98,19 +96,13 @@ public class Synchoniz {
                         lastDateServ = date.getTime();
                         if(lastDateServ < mSettings.getLong(SAVED_UPDATE_TIME, 0)) {
                             System.out.println("Не нужно скачивать с сервера !!!!!!!!!!!!!!!!!!!!!");
-                            //loadToAdapter();
+
                         }else{
                             System.out.println("Нужно скаачать Новые слова с сервера !!!!!!!!!!!!!!!!!!");
                             String whereClause = "created after " + mSettings.getLong(SAVED_UPDATE_TIME, 0);
 
-                            QueryOptions queryOptions = new QueryOptions();
-                            queryOptions.setRelated( Arrays.asList( "Word" ) );
-                            queryOptions.setPageSize(50);
-                            queryOptions.setOffset(0);
-
                             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
                             dataQuery.setWhereClause( whereClause );
-                            dataQuery.setQueryOptions(queryOptions);
 
                             requestToServWithParams(dataQuery, context);
                         }
