@@ -7,11 +7,16 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.view.ActionMode;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -19,6 +24,7 @@ import com.backendless.BackendlessCollection;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.cyborg.englishhelper.R;
+import com.cyborg.englishhelperr.MultiChoiceMode.MultiChoiceMode;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -28,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MyDictionaryFragment extends Fragment {
+public class MyDictionaryFragment extends Fragment implements View.OnLongClickListener{
 
     private long lastDateServ;
 
@@ -39,6 +45,7 @@ public class MyDictionaryFragment extends Fragment {
     private FloatingActionButton fab;
     private DatabaseHelper databaseHelper;
     private String idCurrUser;
+    private List<Words> wordsList;
 
     private SharedPreferences mSettings;
     public static final String APP_PREFERENCES = "mysettings";
@@ -77,6 +84,7 @@ public class MyDictionaryFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         //loadToAdapter();
 
@@ -159,8 +167,24 @@ public class MyDictionaryFragment extends Fragment {
     public void loadToAdapter(){
 
         if (databaseHelper.getWordsCountByOwner() != 0){
-            adapter = new MyAdapter(databaseHelper);
-            recyclerView.setAdapter(adapter);
+            //
+            recyclerView.setAdapter(new AdapterMulti(getActivity(), new MultiChoiceMode(R.menu.media_menu, getActivity()) {
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    switch (item.getItemId()) {
+                        //Delete selected items
+                        case R.id.deleteItem:
+                            deleteSelected();
+                            return true;
+                        //check all items
+                        case R.id.checkAll:
+                            checkAll();
+                            return true;
+                    }
+                    return false;
+                }
+            },databaseHelper));
+
         }else{
             Toast toast = Toast.makeText(getActivity(),
                     "Ваша БД пуста! адд ворд", Toast.LENGTH_SHORT);
@@ -175,6 +199,7 @@ public class MyDictionaryFragment extends Fragment {
                 floatBut.clickBut(fragment);
             }
         }
+
     }
 
 
@@ -199,6 +224,13 @@ public class MyDictionaryFragment extends Fragment {
         editor.putLong(SAVED_UPDATE_TIME, updateTime);
         editor.apply();
 
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+
+        System.out.println("CYKAAAA!!!");
+        return false;
     }
 }
 

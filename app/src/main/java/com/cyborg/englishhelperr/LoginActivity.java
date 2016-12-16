@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String APP_PREFERENCES = "mLoginSetting";
     private Intent intent;
     private String userToken;
-    public static String objectId;
+    public static String objectId;                            // Изменить логику!!!!!!!!!!!!! статические поля нужно убрать!!!!!!
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,12 +131,6 @@ public class LoginActivity extends AppCompatActivity {
         // finish();
     }
 
-    public void startMainActivity(){
-        intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        //finish();
-    }
-
     public LoadingCallback<BackendlessUser> createLoginCallback()
     {
         return new LoadingCallback<BackendlessUser>( this, getString( R.string.loading_login ) )
@@ -153,8 +147,16 @@ public class LoginActivity extends AppCompatActivity {
 
                 //objectId = loggedInUser.getObjectId();
 
+
+
                 startMainActivity();
             }
         };
+    }
+    public void startMainActivity(){
+        intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        //finish();
     }
 }

@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="horizontal"
 android:layout_width="match_parent"
 android:layout_height="wrap_content">
 
 <TextView
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_weight="1"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
     android:text="New Text"
+    android:textSize="20sp"
     android:id="@+id/itemText1"
-    android:layout_gravity="left|top" />
+    android:gravity="left" />
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="New Text"
-    android:id="@+id/itemText2"
-    android:layout_gravity="center_horizontal|top" />
-</FrameLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:textSize="20sp"
+        android:id="@+id/itemText2"
+        android:gravity="left" />
+</LinearLayout>
